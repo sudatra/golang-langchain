@@ -5,14 +5,24 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/sudatra/golang-langchain/chains"
 );
 
 func generateVacation(r GenerateVacationIdeaRequest) GenerateVacationIdeaResponse {
-
+	id := uuid.New();
 }
 
-func getVacation(id uuid.UUID) GenerateVacationIdeaResponse {
-	
+func getVacation(id uuid.UUID) (GetVacationIdeaResponse, error) {
+	v, err := chains.GetVacationFromDB(id);
+	if err != nil {
+		return GetVacationIdeaResponse{}, err;
+	}
+
+	return GetVacationIdeaResponse{	
+		Id: v.Id,
+		Completed: v.Completed,
+		Idea: v.Idea,
+	}, nil;
 }
 
 func GetVacationRouter(router *gin.Engine) *gin.Engine {
@@ -33,7 +43,14 @@ func GetVacationRouter(router *gin.Engine) *gin.Engine {
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"message": "Bad Request"});
 		} else {
-			getVacation(id);
+			resp, err := getVacation(id);
+			if err != nil {
+				c.JSON(http.StatusNotFound, gin.H{"message": "Id not found"})
+			} else {
+				c.JSON(http.StatusOK, resp)
+			}
 		}
 	});
+
+	return router;
 }
