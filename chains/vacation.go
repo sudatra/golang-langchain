@@ -2,7 +2,9 @@ package chains
 
 import (
 	"context"
+	"errors"
 	"log"
+	"slices"
 	"strings"
 
 	"github.com/google/uuid"
@@ -14,7 +16,12 @@ import (
 var Vacations []*Vacation
 
 func GetVacationFromDB(id uuid.UUID) (Vacation, error) {
+	idx := slices.IndexFunc(Vacations, func(v *Vacation) bool {return v.Id == id});
+	if idx < 0 {
+		return Vacation{}, errors.New("ID not found");
+	}
 
+	return *Vacations[idx], nil;
 }
 
 func GenerateVacationIdeaChange(id uuid.UUID, budget int, season string, hobbies []string) {

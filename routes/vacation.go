@@ -10,6 +10,11 @@ import (
 
 func generateVacation(r GenerateVacationIdeaRequest) GenerateVacationIdeaResponse {
 	id := uuid.New();
+	go chains.GenerateVacationIdeaChange(id, r.Budget, r.FavouriteSeason, r.Hobbies);
+	return GenerateVacationIdeaResponse{
+		Id: id,
+		Completed: false,
+	}
 }
 
 func getVacation(id uuid.UUID) (GetVacationIdeaResponse, error) {
