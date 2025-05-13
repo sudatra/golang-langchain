@@ -43,7 +43,7 @@ func GetVacationRouter(router *gin.Engine) *gin.Engine {
 		}
 	});
 
-	registrationRoutes.GET(":/id", func (c *gin.Context) {
+	registrationRoutes.GET("/:id", func (c *gin.Context) {
 		id, err := uuid.Parse(c.Param("id"));
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"message": "Bad Request"});

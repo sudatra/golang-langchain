@@ -13,7 +13,7 @@ import (
 	"github.com/tmc/langchaingo/prompts"
 )
 
-var Vacations []*Vacation
+var Vacations []*Vacation;
 
 func GetVacationFromDB(id uuid.UUID) (Vacation, error) {
 	idx := slices.IndexFunc(Vacations, func(v *Vacation) bool {return v.Id == id});
